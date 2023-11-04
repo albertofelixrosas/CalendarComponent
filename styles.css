@@ -1,0 +1,145 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+body, html {
+    background-color: royalblue;
+    color: white;
+    font-family: sans-serif;
+}
+
+.header {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.header__name {
+    font-size: 1.5rem;
+    color: rgb(212, 237, 245);
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.form, .calendar {
+    width: 400px;
+    padding: 10px;
+}
+
+.calendar {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.main-calendars {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.main-calendars__year {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    color: royalblue;
+}
+
+.form__input {
+    padding: 5px;
+    margin: 5px 0;
+    width: 100%;
+}
+
+.button {
+    width: 100%;
+    border: none;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.calendar__header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    grid-template-columns: repeat(7, 1fr);
+    height: calc(190px / 2);
+    padding: 5px;
+    background-color: white;
+    color: royalblue;
+}
+
+.calendar__month {
+    display: flex;
+    justify-content: center;
+}
+
+.calendar__days-of-week {
+    width: 100%;
+    display: grid;
+    gap: 2px;
+    grid-template-columns: repeat(7, 1fr);
+    height: calc(360px / 6);
+    padding: 5px;
+    background-color: white;
+}
+
+.calendar__body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    padding: 5px;
+    gap: 2px;
+    width: 100%;
+    height: 310px;
+    background-color: white;
+    color: black;
+}
+
+.calendar__cell {
+    border: 1px solid black;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar__cell--yellow {
+    background-color: rgb(248, 255, 149);
+}
+
+.calendar__cell--orange {
+    background-color: rgb(255, 211, 129);
+}
+
+.calendar__cell--red {
+    background-color: rgb(255, 129, 129);
+}
+
+.calendar__cell--green {
+    background-color: rgb(163, 255, 160);
+}
+
+.calendar__cell--gray {
+    background-color: rgb(215, 215, 215);
+}
+
+.calendar__cell--cyan {
+    background-color: rgb(190, 255, 255);
+    color: black;
+}
+
+
