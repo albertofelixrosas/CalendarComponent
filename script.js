@@ -1,5 +1,5 @@
 // @ts-check
-// <> 
+
 /** @type { HTMLInputElement } */
 const htmlInputYear = document.getElementById('year');
 /** @type { HTMLSelectElement } */
@@ -13,15 +13,6 @@ const htmlMainCalendarsContainer = document.getElementById('main-calendars');
 /** @type { HTMLButtonElement } */
 const htmlButtonToShow = document.getElementById('button-to-show');
 
-/*
-1 de enero
-5 de febrero
-18 de marzo
-1 de mayo
-16 de septiembre
-20 de noviembre
-25 de diciembre
-*/
 const HOLIDAYS = [
     { day: 1, month: 1 },
     { day: 5, month: 2 },
@@ -29,24 +20,8 @@ const HOLIDAYS = [
     { day: 1, month: 5 },
     { day: 16, month: 9 },
     { day: 20, month: 11 },
-    { day: 25, month: 12 }
+    { day: 25, month: 12 },
 ];
-
-
-
-/**
- * 
- * @param {Date} date 
- * @param {number} daysCount 
- */
-function getSelectDays(date, daysCount) {
-    const selectedDates = [];
-    for (let i = 0; i < daysCount; i++) {
-        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()).setDate(date.getDate() + i);
-        selectedDates.push(new Date(newDate));
-    }
-    return selectedDates;
-}
 
 function initFormValues() {
     const currentDate = new Date();
@@ -63,7 +38,10 @@ function resetMainCalendarContainer() {
 initFormValues();
 resetMainCalendarContainer();
 
-const handleOnClickShowCalendar = (evt) => {
+/**
+ * @param {MouseEvent} evt
+ */
+const handleOnClickShowCalendar = evt => {
     resetMainCalendarContainer();
     const currentDate = getDateOfForm();
     const numberOfDays = getNumberOfDays();
@@ -77,27 +55,59 @@ const handleOnClickShowCalendar = (evt) => {
 
         allCalendarsOfYear.forEach(calendar => {
             htmlMainCalendarsContainer.appendChild(calendar);
-        })
+        });
     }
+};
+
+function getDateOfForm() {
+    const year = parseInt(htmlInputYear.value);
+    const month = htmlSelectMonth.selectedIndex;
+    const day = parseInt(htmlInputDay.value);
+    return new Date(year, month, day);
+}
+
+function getNumberOfDays() {
+    return parseInt(htmlInputDays.value);
 }
 
 /**
- * @param {number} year 
- * @param {number[]} months 
- * @param {Date[]} selectedDates 
+ * @param {Date} date
+ * @param {number} daysCount
  */
-function createAllCalendarsOfYear(year, months, selectedDates) {
-    return months.map(month => createSpecificCalendar(year, month, selectedDates));
+function getSelectDays(date, daysCount) {
+    const selectedDates = [];
+    for (let i = 0; i < daysCount; i++) {
+        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()).setDate(
+            date.getDate() + i,
+        );
+        selectedDates.push(new Date(newDate));
+    }
+    return selectedDates;
 }
 
-function createSpecificCalendar(year, month, selectedDates) {
-    const calendarDiv = document.createElement('div');
-    calendarDiv.classList.add('calendar');
-    const calendarHeader = createCalendarHeader(month);
-    const calendarBody = createCalendarBody(year, month, selectedDates);
-    calendarDiv.appendChild(calendarHeader);
-    calendarDiv.appendChild(calendarBody);
-    return calendarDiv;
+/** @param {Date[]} selectedDates */
+function getDistinctMonthsOfYears(selectedDates) {
+    /** @type { Map<number, Set<number>>  } */
+    const yearsWithMonths = new Map();
+    for (let i = 0; i < selectedDates.length; i++) {
+        const date = selectedDates[i];
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        if (!yearsWithMonths.has(year)) {
+            yearsWithMonths.set(year, new Set());
+        }
+        const monthsOfYear = yearsWithMonths.get(year);
+        monthsOfYear?.add(month);
+    }
+
+    /** @type { Map<number, number[]> } */
+    const result = new Map();
+    for (const [year, months] of yearsWithMonths) {
+        result.set(year, [...months]);
+    }
+
+    return result;
 }
 
 /**  @param {number} year */
@@ -111,42 +121,34 @@ function createYearHeader(year) {
     return yearHeader;
 }
 
-/** @param {number} index */
-function getMonthTextByIndex(index) {
-    switch (index) {
-        case 0:
-            return 'Enero';
-        case 1:
-            return 'Febrero';
-        case 2:
-            return 'Marzo';
-        case 3:
-            return 'Abril';
-        case 4:
-            return 'Mayo';
-        case 5:
-            return 'Junio';
-        case 6:
-            return 'Julio';
-        case 7:
-            return 'Agosto';
-        case 8:
-            return 'Septiembre';
-        case 9:
-            return 'Octubre';
-        case 10:
-            return 'Noviembre';
-        case 11:
-            return 'Diciembre';
-        default:
-            return null;
-    }
+/**
+ * @param {number} year
+ * @param {number[]} months
+ * @param {Date[]} selectedDates
+ */
+function createAllCalendarsOfYear(year, months, selectedDates) {
+    return months.map(month => createSpecificCalendar(year, month, selectedDates));
 }
 
 /**
- * 
- * @param {number} month 
- * @returns 
+ * @param {number} year
+ * @param {number} month
+ * @param {Date[]} selectedDates
+ * @returns
+ */
+function createSpecificCalendar(year, month, selectedDates) {
+    const calendarDiv = document.createElement('div');
+    calendarDiv.classList.add('calendar');
+    const calendarHeader = createCalendarHeader(month);
+    const calendarBody = createCalendarBody(year, month, selectedDates);
+    calendarDiv.appendChild(calendarHeader);
+    calendarDiv.appendChild(calendarBody);
+    return calendarDiv;
+}
+
+/**
+ * @param {number} month
+ * @returns
  */
 function createCalendarHeader(month) {
     const days = ['D', 'L', 'Ma', 'Mi', 'J', 'V', 'S'];
@@ -156,7 +158,7 @@ function createCalendarHeader(month) {
     const calendarMonth = document.createElement('div');
     calendarMonth.classList.add('calendar__month');
     const calendarMonthTitle = document.createElement('h3');
-    calendarMonthTitle.appendChild(document.createTextNode(getMonthTextByIndex(month) || ''));
+    calendarMonthTitle.appendChild(document.createTextNode(getMonthNameByIndex(month) || ''));
     calendarMonth.appendChild(calendarMonthTitle);
     calendarHeader.classList.add('calendar__header');
 
@@ -177,80 +179,9 @@ function createCalendarHeader(month) {
 }
 
 /**
- * @param {number} year 
- * @param {number} month 
- */
-function getFirstDayOfTheWeekOfAMonth(year, month) {
-    const current = new Date(year, month);
-    return current.getDay();
-}
-
-/**
- * @param {number} year 
- * @param {number} month 
- */
-function getTheCountOfDaysOfAPreviusMonth(year, month) {
-    const current = new Date(year, month);
-    const beforeDateNumber = current.setDate(current.getDate() - 1);
-    return new Date(beforeDateNumber).getDate();
-}
-
-/**
- * @param {number} year 
- * @param {number} month 
- */
-function getDatesValuesForCalendarMonth(year, month) {
-    const firstDayDate = getDateOfFirstDay(new Date(year, month));
-    const indexOfDayOfTheWeek = firstDayDate.getDay();
-    const lastDayOfPreviusMonth = getTheCountOfDaysOfAPreviusMonth(year, month);
-    const lastDayOfCurrentMonth = getTheCountOfDaysOfAPreviusMonth(year, month + 1);
-
-    /** @type { { day: number, month: number, year: number }[] } */
-    const result = [];
-
-    for (let i = 0; i < indexOfDayOfTheWeek; i++) {
-
-        result.unshift({
-            day: lastDayOfPreviusMonth - i,
-            month: month - 1,
-            year
-        });
-    }
-    for (let i = 1; i <= lastDayOfCurrentMonth; i++) {
-        result.push({
-            day: i,
-            month,
-            year
-        });
-    }
-    const lastIterations = 42 - result.length;
-    for (let i = 0; i < lastIterations; i++) {
-        result.push({
-            day: i + 1,
-            month: month + 1,
-            year
-        });
-    }
-    return result;
-}
-
-/**
- * 
- * @param {Date} start 
- * @param {Date} end 
- * @param {Date} value 
- */
-function isBetween(start, end, value) {
-    const startMillis = start.getTime();
-    const endMillis = end.getTime();
-    const valueMillis = value.getTime();
-    return startMillis <= valueMillis && endMillis >= valueMillis;
-}
-
-/**
- * @param {number} year 
- * @param {number} month 
- * @param {Date[]} selectedDates 
+ * @param {number} year
+ * @param {number} month
+ * @param {Date[]} selectedDates
  */
 function createCalendarBody(year, month, selectedDates) {
     const firstDate = selectedDates[0];
@@ -258,7 +189,7 @@ function createCalendarBody(year, month, selectedDates) {
     const calendarBody = document.createElement('div');
     calendarBody.classList.add('calendar__body');
 
-    const datesOfCalendar = getDatesValuesForCalendarMonth(year, month);
+    const datesOfCalendar = getDatesValuesForCalendar(year, month);
 
     const MONTH_HOLIDAYS = HOLIDAYS.filter(id => id.month - 1 === month);
 
@@ -303,23 +234,110 @@ function createCalendarBody(year, month, selectedDates) {
         }
 
         dayDiv.classList.add('calendar__cell--green');
-
     }
 
     return calendarBody;
 }
 
-htmlButtonToShow.addEventListener('click', handleOnClickShowCalendar)
+/**
+ * @param {number} year
+ * @param {number} month
+ */
+function getDatesValuesForCalendar(year, month) {
+    const firstDayDate = getDateOfFirstDay(new Date(year, month));
+    const indexOfDayOfTheWeek = firstDayDate.getDay();
+    const lastDayOfPreviusMonth = getMonthDaysCount(year, month - 1);
+    const lastDayOfCurrentMonth = getMonthDaysCount(year, month);
 
-function getDateOfForm() {
-    const year = parseInt(htmlInputYear.value);
-    const month = htmlSelectMonth.selectedIndex;
-    const day = parseInt(htmlInputDay.value);
-    return new Date(year, month, day);
+    /** @type { { day: number, month: number, year: number }[] } */
+    const result = [];
+
+    for (let i = 0; i < indexOfDayOfTheWeek; i++) {
+        result.unshift({
+            day: lastDayOfPreviusMonth - i,
+            month: month - 1,
+            year,
+        });
+    }
+    for (let i = 1; i <= lastDayOfCurrentMonth; i++) {
+        result.push({
+            day: i,
+            month,
+            year,
+        });
+    }
+    const lastIterations = 42 - result.length;
+    for (let i = 0; i < lastIterations; i++) {
+        result.push({
+            day: i + 1,
+            month: month + 1,
+            year,
+        });
+    }
+    return result;
 }
 
-function getNumberOfDays() {
-    return parseInt(htmlInputDays.value);
+/** @param {number} index */
+function getMonthNameByIndex(index) {
+    switch (index) {
+        case 0:
+            return 'Enero';
+        case 1:
+            return 'Febrero';
+        case 2:
+            return 'Marzo';
+        case 3:
+            return 'Abril';
+        case 4:
+            return 'Mayo';
+        case 5:
+            return 'Junio';
+        case 6:
+            return 'Julio';
+        case 7:
+            return 'Agosto';
+        case 8:
+            return 'Septiembre';
+        case 9:
+            return 'Octubre';
+        case 10:
+            return 'Noviembre';
+        case 11:
+            return 'Diciembre';
+        default:
+            return null;
+    }
+}
+
+/**
+ * @param {number} year
+ * @param {number} month
+ */
+function getFirstDayOfTheWeekOfAMonth(year, month) {
+    const current = new Date(year, month);
+    return current.getDay();
+}
+
+/**
+ * @param {number} year
+ * @param {number} month
+ */
+function getMonthDaysCount(year, month) {
+    const current = new Date(year, month);
+    const beforeDateNumber = current.setDate(current.getDate() - 1);
+    return new Date(beforeDateNumber).getDate();
+}
+
+/**
+ * @param {Date} start
+ * @param {Date} end
+ * @param {Date} value
+ */
+function isBetween(start, end, value) {
+    const startMillis = start.getTime();
+    const endMillis = end.getTime();
+    const valueMillis = value.getTime();
+    return startMillis <= valueMillis && endMillis >= valueMillis;
 }
 
 /**  @param {Date} date */
@@ -327,27 +345,4 @@ function getDateOfFirstDay(date) {
     return new Date(date.getFullYear(), date.getMonth(), 1);
 }
 
-/** @param {Date[]} selectedDates */
-function getDistinctMonthsOfYears(selectedDates) {
-    /** @type { Map<number, Set<number>>  } */
-    const yearsWithMonths = new Map();
-    for (let i = 0; i < selectedDates.length; i++) {
-        const date = selectedDates[i];
-        const year = date.getFullYear();
-        const month = date.getMonth();
-
-        if (!yearsWithMonths.has(year)) {
-            yearsWithMonths.set(year, new Set());
-        }
-        const monthsOfYear = yearsWithMonths.get(year);
-        monthsOfYear?.add(month);
-    }
-
-    /** @type { Map<number, number[]> } */
-    const result = new Map();
-    for (const [year, months] of yearsWithMonths) {
-        result.set(year, [...months]);
-    }
-
-    return result;
-}
+htmlButtonToShow.addEventListener('click', handleOnClickShowCalendar);

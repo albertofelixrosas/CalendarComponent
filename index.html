@@ -11,15 +11,15 @@
 
 <body>
     <header class="header">
-        <h1>Practica de Homework para empezar a chambear <span class="header__name">Alberto Felix Rosas</span></h1>
+        <h1>Practica para vacante para de CUBITS como desarrollador junior <span class="header__name">Alberto Felix Rosas</span></h1>
     </header>
     <main>
         <form action="" class="form-wrapper">
             <div class="form">
-                <label for="">Year</label>
-                <input class="form__input" type="number" name="" id="year" min="1970" max="2200">
-                <label for="">Month</label>
-                <select class="form__input" name="" id="month">
+                <label for="year">Año</label>
+                <input class="form__input" type="number"  id="year" min="1970" max="2200">
+                <label for="month">Mes</label>
+                <select class="form__input" id="month">
                     <option value="1">Enero</option>
                     <option value="2">Febrero</option>
                     <option value="3">Marzo</option>
@@ -33,54 +33,20 @@
                     <option value="11">Noviembre</option>
                     <option value="12">Diciembre</option>
                 </select>
-                <label for="">Day</label>
-                <input class="form__input" type="number" name="" id="day" min="1" max="31">
-                <label for="">Number of days</label>
-                <input class="form__input" value="1" type="number" name="" id="number-of-days" min="1" max="31">
+                <label for="day">Dia</label>
+                <input class="form__input" type="number" id="day" min="1" max="31">
+                <label for="number-of-days">Cantidad de dias</label>
+                <input class="form__input" value="1" type="number" id="number-of-days" min="1" max="31">
                 <button class="button" type="button" id="button-to-show">
-                    Show calendar
+                    Mostrar calendario
                 </button>
             </div>
         </form>
         <div class="main-calendars" id="main-calendars">
-            <div class="main-calendars__year">
-                <h2>2023</h2>
-            </div>
-            <div class="calendar">
-                <div class="calendar__header">
-                    <div class="calendar__month">
-                        <h3>Febrero</h3>
-                    </div>
-                    <div class="calendar__days-of-week">
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                        <div class="calendar__cell">
-                            1
-                        </div>
-                    </div>
-                </div>
-                <div class="calendar__body">
-
-                </div>
-            </div>
         </div>
     </main>
+    <footer class="footer">
+        <a class="footer__link" href="https://github.com/albertofelixrosas"><em>@2023 Alberto Félix Rosas CUBITS</em> <strong>HTML Vanilla</strong></a>
+    </footer>
 </body>
-
 </html>

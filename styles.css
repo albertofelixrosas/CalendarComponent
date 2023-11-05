@@ -5,16 +5,26 @@
     box-sizing: border-box;
 }
 
+body {
+    min-height: 100vh;
+    position: relative;
+}
+
 body, html {
     background-color: royalblue;
     color: white;
     font-family: sans-serif;
 }
 
+main {
+    margin-bottom: 70px;
+}
+
 .header {
     padding: 15px;
     display: flex;
     justify-content: center;
+    text-align: center;
 }
 
 .header__name {
@@ -54,19 +64,30 @@ body, html {
     justify-content: center;
     background-color: white;
     color: royalblue;
+    border-radius: 20px;
+}
+
+label { 
+    font-weight: bold;
 }
 
 .form__input {
-    padding: 5px;
+    padding: 10px;
     margin: 5px 0;
     width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding-left: 10px;
 }
 
 .button {
     width: 100%;
     border: none;
     margin-top: 10px;
-    padding: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .calendar__header {
@@ -79,6 +100,7 @@ body, html {
     padding: 5px;
     background-color: white;
     color: royalblue;
+    border-radius: 15px 15px 0 0;
 }
 
 .calendar__month {
@@ -103,9 +125,10 @@ body, html {
     padding: 5px;
     gap: 2px;
     width: 100%;
-    height: 310px;
+    height: 330px;
     background-color: white;
     color: black;
+    border-radius: 0 0 15px 15px;
 }
 
 .calendar__cell {
@@ -115,6 +138,11 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: default;
+}
+
+.calendar__cell:hover {
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.6);
 }
 
 .calendar__cell--yellow {
@@ -126,7 +154,7 @@ body, html {
 }
 
 .calendar__cell--red {
-    background-color: rgb(255, 129, 129);
+    background-color: rgb(255, 159, 159);
 }
 
 .calendar__cell--green {
@@ -142,4 +170,19 @@ body, html {
     color: black;
 }
 
+.footer {
+    width: 100%;
+    background-color: rgb(85, 85, 226);
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    bottom: 0;
+    position: fixed;
+    text-align: center;
+}
 
+.footer__link {
+    color: white;
+    text-decoration: none;
+}
